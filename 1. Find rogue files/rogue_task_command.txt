@@ -1,0 +1,36 @@
+#setup external mail configuration
+	yum update
+	yum install ssmtp -y
+	yum install mailutils
+	vi /etc/ssmtp/ssmtp.conf
+		#using gmail services
+		root=postmaster
+		mailhub=smtp.gmail.com:587
+		hostname=localhost
+		AuthUser=farriq.razman@gmail.com
+		AuthPass=************
+		FromLineOverride=YES
+		UseSTARTTLS=YES
+	:wq
+
+#create trigger destination
+	mkdir /usr/rogue_finder/ && cd /usr/rogue_finder/
+
+
+#create file
+	vi rogue.sh
+		#!/bin/bash
+		date=$(date +%Y-%m-%d)
+		#find large files
+		find -type f -exec du -Sh {} + | sort -rh | head -n 10 > "$date"_rogue_file_result.txt
+
+		sleep 5
+
+		#send mail
+		cat "$date"_rogue_file_result.txt | ssmtp alert@animapoint.net
+	:wq
+	
+#create cron
+	crontab -e
+		 0 12 * * */usr/rogue_finder/rogue.sh > /dev/null 2>&1
+	:wq

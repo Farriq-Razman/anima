@@ -1,0 +1,3 @@
+/etc/ssmtp/ssmtp.conf
+/usr/rogue_finder/rogue_file_result.txt
+/var/spool/cron/crontabs
