@@ -1,0 +1,19 @@
+#create directory for workstation.sls
+	mkdir /srv/salt
+
+#prepare workstations.sls
+	vi /srv/salt/workstations.sls
+
+#enable salt file_roots
+	vi /etc/salt/master
+		#uncomment following line
+		file_roots:
+		base:
+		- /srv/salt
+
+#restart salt-master to apply config changes
+	systemctl restart salt-master.service
+
+
+#push workstation.sls to all minions
+	salt '*' state.apply workstations
